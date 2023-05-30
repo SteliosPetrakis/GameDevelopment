@@ -2,20 +2,20 @@ package com.example.gamedevelopment;
 
 import static com.example.gamedevelopment.GameView.screenRatioX;
 import static com.example.gamedevelopment.GameView.screenRatioY;
+import static com.example.gamedevelopment.GameView.decreaseHealth;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class Enemy {
 
-    public int speed = 3;
+    public int speed = 5;
     public boolean wasShot = true;
-    int x = 0, y, width, height, birdCounter = 1;
-    public int [] xpoints = new int[16];
-    public int [] ypoints = new int[16];
+    int x = 0, y = 0, width, height, birdCounter = 1;
+    public int[] xpoints = new int[14];
+    public int[] ypoints = new int[14];
 
     public int previouspoint = 0;
     Bitmap enemy1, enemy2, enemy3, enemy4;
@@ -23,52 +23,46 @@ public class Enemy {
     Enemy(Resources res) {
 
         xpoints[0] = 0;
-        ypoints[0] = 120;
+        ypoints[0] = 300;
 
-        xpoints[1] = 500;
-        ypoints[1] = 120;
+        xpoints[1] = 260;
+        ypoints[1] = 300;
 
-        xpoints[2] = 1000;
-        ypoints[2] = 480;
+        xpoints[2] = 260;
+        ypoints[2] = 600;
 
-        xpoints[3] = 1500;
-        ypoints[3] = 480;
+        xpoints[3] = 540;
+        ypoints[3] = 600;
 
-        xpoints[4] = 500;
-        ypoints[4] = 480;
+        xpoints[4] = 540;
+        ypoints[4] = 300;
 
-        xpoints[5] = 500;
-        ypoints[5] = 480;
+        xpoints[5] = 820;
+        ypoints[5] = 300;
 
-        xpoints[6] = 500;
-        ypoints[6] = 480;
+        xpoints[6] = 820;
+        ypoints[6] = 600;
 
-        xpoints[7] = 500;
-        ypoints[7] = 480;
+        xpoints[7] = 1120;
+        ypoints[7] = 600;
 
-        xpoints[8] = 500;
-        ypoints[8] = 480;
+        xpoints[8] = 1120;
+        ypoints[8] = 300;
 
-        xpoints[9] = 500;
-        ypoints[9] = 480;
+        xpoints[9] = 1400;
+        ypoints[9] = 300;
 
-        xpoints[10] = 500;
-        ypoints[10] = 480;
+        xpoints[10] = 1400;
+        ypoints[10] = 600;
 
-        xpoints[11] = 500;
-        ypoints[11] = 480;
+        xpoints[11] = 1680;
+        ypoints[11] = 600;
 
-        xpoints[12] = 500;
-        ypoints[12] = 480;
+        xpoints[12] = 1680;
+        ypoints[12] = 300;
 
-        xpoints[13] = 500;
-        ypoints[13] = 480;
-
-        xpoints[14] = 500;
-        ypoints[14] = 480;
-
-        xpoints[15] = 1500;
-        ypoints[15] = 2000;
+        xpoints[13] = 2500;
+        ypoints[13] = 300;
 
 
         enemy1 = BitmapFactory.decodeResource(res, R.drawable.enemy1);
@@ -90,50 +84,82 @@ public class Enemy {
         enemy3 = Bitmap.createScaledBitmap(enemy3, width, height, false);
         enemy4 = Bitmap.createScaledBitmap(enemy4, width, height, false);
 
-        y = -height;
+        y = ypoints[0]; // Set initial y position to the starting point of the path
     }
 
-    public void getCurrentX(){
-        if (xpoints[previouspoint] <= xpoints[previouspoint + 1])
-        {
-          x = x+speed;
-          previouspoint += 1;
+    public void getCurrentX() {
+        if (previouspoint == 13) {
+            previouspoint = 0;
+        }
+
+        int nextPoint = previouspoint + 1;
+        if (nextPoint >= xpoints.length) {
+            nextPoint = 0;
+        }
+
+        int targetX = xpoints[nextPoint];
+
+        if (x < targetX) {
+            x += speed;
+            if (x >= targetX) {
+                previouspoint = nextPoint;
+            }
+        }
+//        else if (x > targetX) {
+//            x -= speed;
+//            if (x <= targetX) {
+//                previouspoint = nextPoint;
+//            }
+//        }
+
+        else if (x > targetX) {
+            decreaseHealth();
         }
     }
 
-    public void getCurrentY(){
-        if (ypoints[previouspoint] <= ypoints[previouspoint + 1])
-        {
+    public void getCurrentY() {
+        if (previouspoint == 13) {
+            previouspoint = 0;
+        }
+
+        int nextPoint = previouspoint + 1;
+        if (nextPoint >= ypoints.length) {
+            nextPoint = 0;
+        }
+
+        int targetY = ypoints[nextPoint];
+
+        if (y < targetY) {
             y += speed;
-            previouspoint += 1;
+            if (y >= targetY) {
+                previouspoint = nextPoint;
+            }
+        } else if (y > targetY) {
+            y -= speed;
+            if (y <= targetY) {
+                previouspoint = nextPoint;
+            }
         }
     }
 
-
-    Bitmap getBird () {
-
+    Bitmap getBird() {
         if (birdCounter == 1) {
             birdCounter++;
             return enemy1;
         }
-
-        if (birdCounter == 2) {
+        else if (birdCounter == 2) {
             birdCounter++;
             return enemy2;
-        }
-
-        if (birdCounter == 3) {
+        } else if (birdCounter == 3) {
             birdCounter++;
             return enemy3;
+        } else {
+            birdCounter = 1;
+            return enemy4;
         }
-
-        birdCounter = 1;
-
-        return enemy4;
     }
 
-    Rect getCollisionShape () {
+    Rect getCollisionShape() {
         return new Rect(x, y, x + width, y + height);
     }
-
 }
