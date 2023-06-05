@@ -18,7 +18,7 @@
         android:layout_above="@id/play"
         android:layout_below="@id/highScoreTxt"
         android:layout_centerHorizontal="true"
-        android:text="GT Game Example!"
+        android:text="Ant Defense"
         android:textColor="#ffffff"
         android:textSize="48sp" />
 

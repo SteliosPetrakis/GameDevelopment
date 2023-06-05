@@ -8,19 +8,31 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import java.util.Random;
 
 public class Enemy {
 
-    public int speed = 5;
-    public boolean wasShot = true;
+    Random random = new Random();
+//    int temp_speed = 5;
+    public int speed;
+//    = temp_speed;
+
+    public boolean wasShot = false;
     int x = 0, y = 0, width, height, birdCounter = 1;
     public int[] xpoints = new int[14];
     public int[] ypoints = new int[14];
 
+    public Bitmap bird_list;
+
+    public boolean alive = true;
     public int previouspoint = 0;
     Bitmap enemy1, enemy2, enemy3, enemy4;
 
     Enemy(Resources res) {
+
+//        speed = temp_speed;
+
+//        temp_speed *= 3;
 
         xpoints[0] = 0;
         ypoints[0] = 300;
@@ -112,7 +124,9 @@ public class Enemy {
 //            }
 //        }
 
-        else if (x > targetX) {
+        else if (x >= xpoints[13] && alive && !wasShot) {
+            alive = false;
+            GameView.dead += 1;
             decreaseHealth();
         }
     }
