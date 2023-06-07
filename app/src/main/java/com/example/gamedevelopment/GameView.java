@@ -29,6 +29,8 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint paint;
     private Enemy[] birds;
 
+    private Enemy_Red[] red_birds;
+
     private Arrow button;
 
     private Arrow[] arrows;
@@ -98,9 +100,22 @@ public class GameView extends SurfaceView implements Runnable {
         paint.setTextSize(128);
         paint.setColor(Color.WHITE);
 
+        int temp = 3;
         birds = new Enemy[4];
-        for (int i=0; i<4; i++)
+        for (int i=0; i<4; i++){
             birds[i] = new Enemy(getResources());
+            birds[i].speed = temp;
+            temp+= 1.5;
+        }
+
+        temp = 3;
+
+        red_birds = new Enemy_Red[4];
+        for (int i=0; i<4; i++) {
+            red_birds[i] = new Enemy_Red(getResources());
+            red_birds[i].speed = temp;
+            temp+= 1.5;
+        }
 
         arrows = new Arrow[4];
         for (int i=0; i<4; i++)
@@ -123,6 +138,7 @@ public class GameView extends SurfaceView implements Runnable {
     }
 
     private void update () throws InterruptedException {
+
 //        background1.x -= (int)(10f * screenRatioX);
 //        background2.x -= (int)(10f * screenRatioX);
 
@@ -167,12 +183,27 @@ public class GameView extends SurfaceView implements Runnable {
                 if (Rect.intersects(bird.getCollisionShape(), bullet.getCollisionShape())) {
                     score++;
                     dead++;
-                    bird.x = 2500;
-                    bird.y = 300;
+//                    bird.x = 2500;
+//                    bird.y = 300;
+                    bird.respawn = true;
                     bullet.x = screenX + 500;
                     bird.wasShot = true;
                 }
             }
+
+            for (Enemy_Red bird : red_birds) {
+                if (Rect.intersects(bird.getCollisionShape(), bullet.getCollisionShape())) {
+                    score++;
+                    dead++;
+//                    bird.x = 2500;
+//                    bird.y = 300;
+                    bullet.x = screenX + 500;
+                    bird.wasShot = true;
+                    bird.respawn = true;
+                }
+            }
+
+
         }
 
 //        for (Arrow arrow : arrows) {
@@ -204,8 +235,11 @@ public class GameView extends SurfaceView implements Runnable {
 
         arrows[3].arrow = Arrow.getArrowBitmap();
 
-        int temp = 3;
-
+//        int temp = 3;
+//
+//        if(temp >= 7.5){
+//            temp = 3;
+//        }
 //        int sign = -2;
 
         for (Bullet bullet : trash)
@@ -219,9 +253,7 @@ public class GameView extends SurfaceView implements Runnable {
 //            sleep();
             Enemy bird = birds[i];
 
-            bird.speed = temp;
 
-            temp += 1.5;
 //            sign = sign*(-1);
 
             bird.getCurrentX();
@@ -234,9 +266,9 @@ public class GameView extends SurfaceView implements Runnable {
                 return;
             }
 
-            if(bullets_count == 5){
-                isGameOver = true;
-            }
+//            if(bullets_count == 5){
+//                isGameOver = true;
+//            }
 
             if (bird.x == bird.xpoints[0] && bird.y == bird.ypoints[0]) {
                 bird.previouspoint = 0; // Reset previous point to the start
@@ -268,7 +300,7 @@ public class GameView extends SurfaceView implements Runnable {
                 }
             }
 
-            if (bird.x < bird.xpoints[0] && bird.y > bird.ypoints[14]) {
+            if (bird.x < bird.xpoints[0] && bird.y > bird.ypoints[13]) {
                 if (!bird.wasShot) {
                     isGameOver = true;
                     return;
@@ -292,10 +324,94 @@ public class GameView extends SurfaceView implements Runnable {
 //            }
 //
         }
-        if(dead >= birds.length ) {
-            Log.d("END", "You win");
-            isGameOver = true;
+
+//        temp = 3;
+
+        if(dead >= birds.length) {
+            for (i = 0; i < red_birds.length; i++) {
+
+//            Thread.sleep(3000);
+//            sleep();
+                Enemy_Red bird = red_birds[i];
+
+
+//                bird.speed = temp;
+//
+//                temp += 1.5;
+//            sign = sign*(-1);
+
+                bird.getCurrentX();
+                bird.getCurrentY();
+
+                if (health == 0) {
+                    isGameOver = true;
+                    Log.d("SteliosTest4", "GameOver = " + isGameOver);
+                    return;
+                }
+
+//                if (bullets_count == 5) {
+//                    isGameOver = true;
+//                }
+
+                if (bird.x == bird.xpoints[0] && bird.y == bird.ypoints[0]) {
+                    bird.previouspoint = 0; // Reset previous point to the start
+                }
+
+
+//            Log.d("SteliosTest2", "currentpoint = " + bird.previouspoint);
+//            Log.d("SteliosTest3", "x = " + bird.x);
+//            Log.d("SteliosTest3", "y = " + bird.y);
+
+                if (bird.x == bird.xpoints[bird.previouspoint] && bird.y == bird.ypoints[bird.previouspoint]) {
+                    int nextPoint = bird.previouspoint + 1;
+                    if (nextPoint >= bird.xpoints.length) {
+                        nextPoint = 0;
+                    }
+
+                    int targetX = bird.xpoints[nextPoint];
+                    int targetY = bird.ypoints[nextPoint];
+
+                    // Calculate movement direction
+                    int moveX = Integer.compare(targetX, bird.x);
+                    int moveY = Integer.compare(targetY, bird.y);
+
+                    bird.x += bird.speed * moveX;
+                    bird.y += bird.speed * moveY;
+
+                    if (bird.x == targetX && bird.y == targetY) {
+                        bird.previouspoint = nextPoint;
+                    }
+                }
+
+                if (bird.x < bird.xpoints[0] && bird.y > bird.ypoints[14]) {
+                    if (!bird.wasShot) {
+                        isGameOver = true;
+                        return;
+                    }
+
+                    int bound = (int) (30f * screenRatioX);
+//                    bird.speed = random.nextInt(bound);
+
+                    if (bird.speed < (int) (10f * screenRatioX))
+                        bird.speed = (int) (10f * screenRatioX);
+
+                    bird.x = screenX;
+                    bird.y = random.nextInt(screenY - bird.height);
+
+                    bird.wasShot = false;
+                }
+
+//            if (Rect.intersects(bird.getCollisionShape(), flight.getCollisionShape())) {
+//                isGameOver = true;
+//                return;
+//            }
+//
+            }
         }
+//        if(dead >= birds.length ) {
+//            Log.d("END", "You win");
+//            isGameOver = true;
+//        }
         //        for (int i = 0; i < arrows.length - 1; i++) {
 //            Arrow arrow = arrows[i];
 //
@@ -315,6 +431,13 @@ public class GameView extends SurfaceView implements Runnable {
                 canvas.drawBitmap(bird.getBird(), bird.x, bird.y, paint);
             }
 
+            if(dead >= birds.length) {
+
+                for (int i = 0; i < red_birds.length; i++) {
+                    Enemy_Red bird = red_birds[i];
+                    canvas.drawBitmap(bird.getBird(), bird.x, bird.y, paint);
+                }
+            }
             canvas.drawText(score + "", screenX / 2f, 164, paint);
 
             if (isGameOver) {

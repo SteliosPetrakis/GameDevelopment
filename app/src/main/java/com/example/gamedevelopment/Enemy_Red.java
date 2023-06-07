@@ -1,25 +1,27 @@
-    package com.example.gamedevelopment;
+package com.example.gamedevelopment;
 
-    import static com.example.gamedevelopment.GameView.screenRatioX;
-    import static com.example.gamedevelopment.GameView.screenRatioY;
-    import static com.example.gamedevelopment.GameView.decreaseHealth;
+import static com.example.gamedevelopment.GameView.decreaseHealth;
+import static com.example.gamedevelopment.GameView.screenRatioX;
+import static com.example.gamedevelopment.GameView.screenRatioY;
 
-    import android.content.res.Resources;
-    import android.graphics.Bitmap;
-    import android.graphics.BitmapFactory;
-    import android.graphics.Rect;
-    import android.util.Log;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.util.Log;
 
-    import java.util.Random;
+import java.util.Random;
 
-    public class Enemy {
+    public class Enemy_Red {
 
         Random random = new Random();
     //    int temp_speed = 5;
         public int speed;
     //    = temp_speed;
 
-        int lives = 3;
+        public int lives = 5;
+
+        boolean respawn = false;
 
         public boolean wasShot = false;
         int x = 0, y = 0, width, height, birdCounter = 1;
@@ -29,12 +31,10 @@
         public Bitmap bird_list;
 
         public boolean alive = true;
-
-        boolean respawn = false;
         public int previouspoint = 0;
         Bitmap enemy1, enemy2, enemy3, enemy4;
 
-        Enemy(Resources res) {
+        Enemy_Red(Resources res) {
 
     //        speed = temp_speed;
 
@@ -83,20 +83,18 @@
             ypoints[13] = 300;
 
 
-            enemy1 = BitmapFactory.decodeResource(res, R.drawable.enemy1);
-            enemy2 = BitmapFactory.decodeResource(res, R.drawable.enemy2);
-            enemy3 = BitmapFactory.decodeResource(res, R.drawable.enemy3);
-            enemy4 = BitmapFactory.decodeResource(res, R.drawable.enemy4);
+            enemy1 = BitmapFactory.decodeResource(res, R.drawable.enemy5);
+            enemy2 = BitmapFactory.decodeResource(res, R.drawable.enemy6);
+            enemy3 = BitmapFactory.decodeResource(res, R.drawable.enemy7);
+            enemy4 = BitmapFactory.decodeResource(res, R.drawable.enemy8);
 
             width = enemy1.getWidth();
             height = enemy1.getHeight();
 
-            width /= 8;
-            height /= 8;
+            width /= 32;
+            height /= 32;
 
-
-            Log.d("Size", "dd1" + width + " " + height);
-
+            Log.d("Size", "dd" + width + " " + height);
 
             width = (int) (width * screenRatioX);
             height = (int) (height * screenRatioY);
@@ -127,11 +125,6 @@
                 alive = false;
             }
 
-            if(!alive){
-                x = 3000;
-                y = 3000;
-            }
-
             int targetX = xpoints[nextPoint];
 
             if (x < targetX) {
@@ -148,7 +141,7 @@
     //        }
 
             else if ((x >= xpoints[13] && alive && !wasShot) && respawn) {
-                Log.d("RESPAWN", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
+                Log.d("RESPAWN RED", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
 //                alive = false;
                 x = xpoints[0];
                 y = ypoints[0];
@@ -161,20 +154,18 @@
                 Log.d("RESPAWN 2", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
             }
             else if ((!alive && lives > 0) || (wasShot && lives > 0) && respawn) {
-                Log.d("RESPAWN 3", "FUCKING RESPAWN" + x + " " + y + " " + alive + " " + wasShot + " " + lives);
                 x = xpoints[0];
                 y = ypoints[0];
                 previouspoint = 0;
                 lives--;
                 speed = 3;
                 respawn = false;
-                Log.d("RESPAWN 4", "FUCKING RESPAWN" + x + " " + y + " " + alive + " " + wasShot + " " + lives);
             }
 //            else if(wasShot && lives > 0){
 //                x = xpoints[0];
 //                y = ypoints[0];
-//                lives--;
 //                previouspoint = 0;
+//                lives--;
 //                speed = 3;
 //            }
         }
