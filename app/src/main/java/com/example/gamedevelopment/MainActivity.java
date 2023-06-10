@@ -1,7 +1,5 @@
 package com.example.gamedevelopment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +7,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         final SharedPreferences prefs = getSharedPreferences("game", MODE_PRIVATE);
         highScoreTxt.setText("HighScore: " + prefs.getInt("highscore", 0));
+
+
 
         isMute = prefs.getBoolean("isMute", false);
 

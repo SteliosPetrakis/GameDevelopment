@@ -15,9 +15,7 @@ import java.util.Random;
     public class Enemy_Red {
 
         Random random = new Random();
-    //    int temp_speed = 5;
         public int speed;
-    //    = temp_speed;
 
         public int lives = 5;
 
@@ -36,9 +34,7 @@ import java.util.Random;
 
         Enemy_Red(Resources res) {
 
-    //        speed = temp_speed;
 
-    //        temp_speed *= 3;
 
             xpoints[0] = 0;
             ypoints[0] = 300;
@@ -125,6 +121,11 @@ import java.util.Random;
                 alive = false;
             }
 
+            if(!alive){
+                x = 3000;
+                y = 3000;
+            }
+
             int targetX = xpoints[nextPoint];
 
             if (x < targetX) {
@@ -133,24 +134,16 @@ import java.util.Random;
                     previouspoint = nextPoint;
                 }
             }
-    //        else if (x > targetX) {
-    //            x -= speed;
-    //            if (x <= targetX) {
-    //                previouspoint = nextPoint;
-    //            }
-    //        }
+
 
             else if ((x >= xpoints[13] && alive && !wasShot) && respawn) {
                 Log.d("RESPAWN RED", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
-//                alive = false;
                 x = xpoints[0];
                 y = ypoints[0];
-//                previouspoint = 0;
                 GameView.dead += 1;
                 decreaseHealth();
                 speed = 3;
                 respawn = false;
-//                respawn = !(respawn);
                 Log.d("RESPAWN 2", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
             }
             else if ((!alive && lives > 0) || (wasShot && lives > 0) && respawn) {
@@ -161,13 +154,7 @@ import java.util.Random;
                 speed = 3;
                 respawn = false;
             }
-//            else if(wasShot && lives > 0){
-//                x = xpoints[0];
-//                y = ypoints[0];
-//                previouspoint = 0;
-//                lives--;
-//                speed = 3;
-//            }
+
         }
 
         public void getCurrentY() {

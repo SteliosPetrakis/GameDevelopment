@@ -140,24 +140,16 @@
                     previouspoint = nextPoint;
                 }
             }
-    //        else if (x > targetX) {
-    //            x -= speed;
-    //            if (x <= targetX) {
-    //                previouspoint = nextPoint;
-    //            }
-    //        }
+
 
             else if ((x >= xpoints[13] && alive && !wasShot) && respawn) {
                 Log.d("RESPAWN", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
-//                alive = false;
                 x = xpoints[0];
                 y = ypoints[0];
-//                previouspoint = 0;
                 GameView.dead += 1;
                 decreaseHealth();
                 speed = 3;
                 respawn = false;
-//                respawn = !(respawn);
                 Log.d("RESPAWN 2", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
             }
             else if ((!alive && lives > 0) || (wasShot && lives > 0) && respawn) {
@@ -170,13 +162,7 @@
                 respawn = false;
                 Log.d("RESPAWN 4", "FUCKING RESPAWN" + x + " " + y + " " + alive + " " + wasShot + " " + lives);
             }
-//            else if(wasShot && lives > 0){
-//                x = xpoints[0];
-//                y = ypoints[0];
-//                lives--;
-//                previouspoint = 0;
-//                speed = 3;
-//            }
+
         }
 
         public void getCurrentY() {
