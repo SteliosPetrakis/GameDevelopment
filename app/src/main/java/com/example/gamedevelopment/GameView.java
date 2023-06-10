@@ -31,10 +31,6 @@ public class GameView extends SurfaceView implements Runnable {
 
     private Enemy_Red[] red_birds;
 
-    private Arrow button;
-
-    private Arrow[] arrows;
-
     private SharedPreferences prefs;
     private Random random;
     private SoundPool soundPool;
@@ -49,17 +45,14 @@ public class GameView extends SurfaceView implements Runnable {
     private int bullets_count = 0;
 
     public static int dead = 0;
+    public static int dead_red = 0;
     public static void decreaseHealth() {
         health -=1;
-        Log.d("SteliosTest5", "health =  " + health);
     }
 
 
     public GameView(GameActivity activity, int screenX, int screenY) {
         super(activity);
-
-        button = new Arrow(getResources());
-        button.arrow = Arrow.shoot;
 
         this.activity = activity;
 
@@ -117,10 +110,6 @@ public class GameView extends SurfaceView implements Runnable {
             temp+= 1.5;
         }
 
-        arrows = new Arrow[4];
-        for (int i=0; i<4; i++)
-            arrows[i] = new Arrow(getResources());
-
         random = new Random();
     }
 
@@ -174,17 +163,16 @@ public class GameView extends SurfaceView implements Runnable {
             for (Enemy bird : birds) {
                 if (Rect.intersects(bird.getCollisionShape(), bullet.getCollisionShape())) {
                     score++;
-                    dead++;
                     bird.respawn = true;
                     bullet.x = screenX + 500;
                     bird.wasShot = true;
+
                 }
             }
 
             for (Enemy_Red bird : red_birds) {
                 if (Rect.intersects(bird.getCollisionShape(), bullet.getCollisionShape())) {
                     score++;
-                    dead++;
                     bullet.x = screenX + 500;
                     bird.wasShot = true;
                     bird.respawn = true;
@@ -193,27 +181,6 @@ public class GameView extends SurfaceView implements Runnable {
 
 
         }
-
-
-        arrows[0].x = 100;
-        arrows[0].y = 200;
-
-        arrows[0].arrow = Arrow.getArrowBitmap();
-
-        arrows[1].x = 200;
-        arrows[1].y = 300;
-
-        arrows[1].arrow = Arrow.getArrowBitmap();
-
-        arrows[2].x = 300;
-        arrows[2].y = 400;
-
-        arrows[2].arrow = Arrow.getArrowBitmap();
-
-        arrows[3].x = 400;
-        arrows[3].y = 500;
-
-        arrows[3].arrow = Arrow.getArrowBitmap();
 
 
         for (Bullet bullet : trash)
@@ -235,10 +202,8 @@ public class GameView extends SurfaceView implements Runnable {
             if (health == 0)
             {
                 isGameOver = true;
-                Log.d("SteliosTest4", "GameOver = " + isGameOver);
                 return;
             }
-
 
 
             if (bird.x == bird.xpoints[0] && bird.y == bird.ypoints[0]) {
@@ -302,7 +267,6 @@ public class GameView extends SurfaceView implements Runnable {
 
                 if (health == 0) {
                     isGameOver = true;
-                    Log.d("SteliosTest4", "GameOver = " + isGameOver);
                     return;
                 }
 
@@ -333,13 +297,11 @@ public class GameView extends SurfaceView implements Runnable {
                     }
                 }
 
-                if (bird.x < bird.xpoints[0] && bird.y > bird.ypoints[14]) {
+                if (bird.x < bird.xpoints[0] && bird.y > bird.ypoints[13]) {
                     if (!bird.wasShot) {
                         isGameOver = true;
                         return;
                     }
-
-                    int bound = (int) (30f * screenRatioX);
 
                     if (bird.speed < (int) (10f * screenRatioX))
                         bird.speed = (int) (10f * screenRatioX);
@@ -352,6 +314,10 @@ public class GameView extends SurfaceView implements Runnable {
 
 
             }
+        }
+
+        if(dead >= 4 * 3 && dead_red >= 4 * 5){
+            isGameOver = true;
         }
 
     }
@@ -481,7 +447,7 @@ public class GameView extends SurfaceView implements Runnable {
                 }
                 break;
         }
-//        }
+
         return true;
     }
 
@@ -494,16 +460,5 @@ public class GameView extends SurfaceView implements Runnable {
         bullet.y = flight.y + (flight.height / 4);
         bullets.add(bullet);
     }
-
-    public int getScreenY() {
-
-        return 0;
-    }
-
-    public int getScreenX() {
-
-        return 0;
-    }
-
 
 }

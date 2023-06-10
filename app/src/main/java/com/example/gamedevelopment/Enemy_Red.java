@@ -8,13 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.util.Log;
-
-import java.util.Random;
 
     public class Enemy_Red {
-
-        Random random = new Random();
         public int speed;
 
         public int lives = 5;
@@ -90,8 +85,6 @@ import java.util.Random;
             width /= 32;
             height /= 32;
 
-            Log.d("Size", "dd" + width + " " + height);
-
             width = (int) (width * screenRatioX);
             height = (int) (height * screenRatioY);
 
@@ -137,14 +130,11 @@ import java.util.Random;
 
 
             else if ((x >= xpoints[13] && alive && !wasShot) && respawn) {
-                Log.d("RESPAWN RED", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
                 x = xpoints[0];
                 y = ypoints[0];
-                GameView.dead += 1;
                 decreaseHealth();
                 speed = 3;
                 respawn = false;
-                Log.d("RESPAWN 2", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
             }
             else if ((!alive && lives > 0) || (wasShot && lives > 0) && respawn) {
                 x = xpoints[0];
@@ -152,6 +142,7 @@ import java.util.Random;
                 previouspoint = 0;
                 lives--;
                 speed = 3;
+                GameView.dead_red += 1;
                 respawn = false;
             }
 

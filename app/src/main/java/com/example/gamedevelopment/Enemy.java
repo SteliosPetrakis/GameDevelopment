@@ -1,24 +1,16 @@
     package com.example.gamedevelopment;
 
+    import static com.example.gamedevelopment.GameView.decreaseHealth;
     import static com.example.gamedevelopment.GameView.screenRatioX;
     import static com.example.gamedevelopment.GameView.screenRatioY;
-    import static com.example.gamedevelopment.GameView.decreaseHealth;
 
     import android.content.res.Resources;
     import android.graphics.Bitmap;
     import android.graphics.BitmapFactory;
     import android.graphics.Rect;
-    import android.util.Log;
-
-    import java.util.Random;
 
     public class Enemy {
-
-        Random random = new Random();
-    //    int temp_speed = 5;
         public int speed;
-    //    = temp_speed;
-
         int lives = 3;
 
         public boolean wasShot = false;
@@ -95,9 +87,6 @@
             height /= 8;
 
 
-            Log.d("Size", "dd1" + width + " " + height);
-
-
             width = (int) (width * screenRatioX);
             height = (int) (height * screenRatioY);
 
@@ -143,24 +132,20 @@
 
 
             else if ((x >= xpoints[13] && alive && !wasShot) && respawn) {
-                Log.d("RESPAWN", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
                 x = xpoints[0];
                 y = ypoints[0];
-                GameView.dead += 1;
                 decreaseHealth();
                 speed = 3;
                 respawn = false;
-                Log.d("RESPAWN 2", "FUCKING RESPAWN " + x + " " + y + " " + alive + " " + wasShot + " " + lives + " " + respawn);
             }
             else if ((!alive && lives > 0) || (wasShot && lives > 0) && respawn) {
-                Log.d("RESPAWN 3", "FUCKING RESPAWN" + x + " " + y + " " + alive + " " + wasShot + " " + lives);
                 x = xpoints[0];
                 y = ypoints[0];
                 previouspoint = 0;
                 lives--;
                 speed = 3;
+                GameView.dead++;
                 respawn = false;
-                Log.d("RESPAWN 4", "FUCKING RESPAWN" + x + " " + y + " " + alive + " " + wasShot + " " + lives);
             }
 
         }
