@@ -1,3 +1,1 @@
-# GameDevelopment
-
-This is just a simple android studio game. Nothing special, it was for a project.
+Within this thesis the creation and concept of a game is developed, described, and examined. The main elements described are the inspiration, construction, and implementation of a complete game. The methodology followed to accomplish this project will also be examined, which was through the use of the various open-source tools available on the internet to find information and build code, analyze it and the various tests to implement a complete game
